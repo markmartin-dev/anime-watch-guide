@@ -12,6 +12,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/anime" element={<AnimeList />} />
         <Route path="/anime/:id" element={<AnimeDetail />} />
+        <Route path="/anime/:id/:slug" element={<AnimeDetail />} />
         <Route path="/news" element={<News />} />
       </Routes>
     </BrowserRouter>
