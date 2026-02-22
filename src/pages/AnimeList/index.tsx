@@ -24,7 +24,7 @@ const AnimeList: React.FC = () => {
         <h1>All Anime</h1>
         {isLoading && <div>Loading...</div>}
         {error && <div>Error loading anime</div>}
-        <section>
+        <section className="card__wrapper">
           {data?.data?.map((a: any) => (
             <AnimeCard key={a.mal_id} anime={a} />
           ))}

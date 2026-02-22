@@ -1,0 +1,9 @@
+.picture {
+  display: block;
+  line-height: 0;
+}
+
+.image {
+  max-width: 100%;
+  margin: 0 auto;
+}

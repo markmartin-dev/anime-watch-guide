@@ -56,6 +56,8 @@ const AnimeDetail: React.FC = () => {
             <li>Year: {anime.year ?? 'N/A'}</li>
             <li>Episodes: {anime.episodes ?? 'N/A'}</li>
         </ul>
+        <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" preferredSize="large" />
+        <h2>Synopsis</h2>
         <p>{anime?.synopsis}</p>
         {anime?.type === 'TV' && 
         <>            
@@ -108,7 +110,6 @@ const AnimeDetail: React.FC = () => {
             )}
         </>
         }
-        <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" preferredSize="large" />
       </main>
     </div>
   )

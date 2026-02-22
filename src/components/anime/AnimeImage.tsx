@@ -1,5 +1,6 @@
 import React from 'react'
 import type { AnimeImages, AnimeImageVariant } from '../../types/anime'
+import styles from './AnimeImage.module.css'
 
 type PreferredSize = 'small' | 'large'
 
@@ -70,12 +71,13 @@ const AnimeImage: React.FC<AnimeImageProps> = ({
     : getFallbackImage(images)
 
   if (!fallbackImage) return null
+  const imageClassName = className ? `${styles.image} ${className}` : styles.image
 
   return (
-    <picture>
+    <picture className={styles.picture}>
       {webpSrcSet && <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />}
       {jpgSrcSet && <source type="image/jpeg" srcSet={jpgSrcSet} sizes={sizes} />}
-      <img src={fallbackImage} alt={`${title} poster`} loading={loading} className={className} />
+      <img src={fallbackImage} alt={`${title} poster`} loading={loading} className={imageClassName} />
     </picture>
   )
 }

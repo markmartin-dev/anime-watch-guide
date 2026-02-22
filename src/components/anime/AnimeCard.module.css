@@ -1,0 +1,78 @@
+.card {
+    display: flex;
+    flex-direction: column;;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #d6dce5;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.1rem;
+    overflow: hidden;
+    width: 250px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.titleLink {
+    color: #0f172a;
+    text-decoration: none;
+}
+
+.titleLink:hover {
+    text-decoration: underline;
+}
+
+.synopsis {
+    margin: 0;
+    color: #334155;
+    line-height: 1.5;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    text-wrap: balance;
+    text-align: start;
+    height: 75px;
+}
+
+.metaList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.metaItem {
+    color: #475569;
+}
+
+.genreItem {
+    list-style: none;
+}
+
+.genreLink {
+    display: inline-block;
+    padding: 0.2rem 0.45rem;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #0f172a;
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.genreLink:hover {
+    background: #cbd5e1;
+}
