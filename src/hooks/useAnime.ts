@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchAnimeList, fetchAnimeById } from '../services/animeService'
+import { fetchAnimeList, fetchAnimeById, fetchAnimeEpisodes } from '../services/animeService'
 import type { AnimeListResponse } from '../types/anime'
 
 export const useAnimeList = (page = 1) => {
@@ -18,4 +18,12 @@ export const useAnimeById = (id?: string) => {
   })
 }
 
-export default { useAnimeList, useAnimeById }
+export const useAnimeEpisodes = (id?: string, page = 1) => {
+  return useQuery({
+    queryKey: ['anime', id, 'episodes', page],
+    queryFn: () => fetchAnimeEpisodes(id || '', page),
+    enabled: Boolean(id),
+  })
+}
+
+export default { useAnimeList, useAnimeById, useAnimeEpisodes }

@@ -9,4 +9,8 @@ export const fetchAnimeById = async (id: string | number): Promise<{ data: Anime
   return apiGet(`/anime/${id}`)
 }
 
-export default { fetchAnimeList, fetchAnimeById }
+export const fetchAnimeEpisodes = async (id: string | number, page = 1) => {
+  return apiGet(`/anime/${id}/episodes`, { page })
+}
+
+export default { fetchAnimeList, fetchAnimeById, fetchAnimeEpisodes }
