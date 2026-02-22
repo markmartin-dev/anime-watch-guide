@@ -14,6 +14,9 @@ const AnimeCard: React.FC<{ anime: Anime }> = ({ anime }) => {
       </h3>
       <p>{anime.synopsis}</p>
       <ul>
+        <li>Type: {anime.type}</li>
+        <li>Episodes: {anime.episodes ?? 'N/A'}</li>
+        <li>Status: {anime.status}</li>
         {anime.genres?.map((genre) => (
           <li key={genre.mal_id}><Link to={`/genres/${genre.mal_id}`}>{genre.name}</Link></li>
         ))}
