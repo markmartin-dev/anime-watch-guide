@@ -59,7 +59,7 @@ const AnimeDetail: React.FC = () => {
         <p>{anime?.synopsis}</p>
         {anime?.type === 'TV' && 
         <>            
-            <h2>Episodes</h2>
+            <h2>Episode List</h2>
             {isEpisodesLoading && <p>Loading episodes...</p>}
             {episodesError && (
               <p>
@@ -72,32 +72,38 @@ const AnimeDetail: React.FC = () => {
             )}
             {!isEpisodesLoading && !episodesError && Boolean(episodes.length) && (
               <>
-                <h3>Canon Episodes ({canonEpisodes.length})</h3>
-                <ul>
-                  {canonEpisodes.map((ep) => (
-                    <li key={ep.mal_id}>
-                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
-                    </li>
-                  ))}
-                </ul>
+                <details open name="episode-list">
+                  <summary>Canon Episodes ({canonEpisodes.length})</summary>
+                  <ul>
+                    {canonEpisodes.map((ep) => (
+                      <li key={ep.mal_id}>
+                        Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
+                      </li>
+                    ))}
+                  </ul>
+                </details>
 
-                <h3>Recap Episodes ({recapEpisodes.length})</h3>
-                <ul>
-                  {recapEpisodes.map((ep) => (
-                    <li key={ep.mal_id}>
-                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
-                    </li>
-                  ))}
-                </ul>
+                <details name="episode-list">
+                  <summary>Recap Episodes ({recapEpisodes.length})</summary>
+                  <ul>
+                    {recapEpisodes.map((ep) => (
+                      <li key={ep.mal_id}>
+                        Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
+                      </li>
+                    ))}
+                  </ul>
+                </details>
 
-                <h3>Filler Episodes ({fillerEpisodes.length})</h3>
-                <ul>
-                  {fillerEpisodes.map((ep) => (
-                    <li key={ep.mal_id}>
-                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
-                    </li>
-                  ))}
-                </ul>
+                <details name="episode-list">
+                  <summary>Filler Episodes ({fillerEpisodes.length})</summary>
+                  <ul>
+                    {fillerEpisodes.map((ep) => (
+                      <li key={ep.mal_id}>
+                        Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
+                      </li>
+                    ))}
+                  </ul>
+                </details>
               </>
             )}
         </>
