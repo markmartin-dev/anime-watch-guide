@@ -1,8 +1,8 @@
 import { apiGet } from '../api/client'
 import type { AnimeListResponse, Anime } from '../types/anime'
 
-export const fetchAnimeList = async (page = 1): Promise<AnimeListResponse> => {
-  return apiGet('/anime', { page })
+export const fetchAnimeList = async (page = 1, limit = 20, orderBy = 'title', sfw = true, type = "tv"): Promise<AnimeListResponse> => {
+  return apiGet('/anime', { page, limit, orderBy, sfw, type })
 }
 
 export const fetchAnimeById = async (id: string | number): Promise<{ data: Anime }> => {
