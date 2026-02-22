@@ -5,6 +5,16 @@ import Header from '../../components/layout/Header'
 import AnimeImage from '../../components/anime/AnimeImage'
 import { useAnimeById, useAnimeEpisodes } from '../../hooks/useAnime'
 import { slugify } from '../../utils/slug'
+import { formatAiredDate } from '../../utils/format'
+
+type Episode = {
+  mal_id: number
+  episode_id?: number
+  title?: string
+  aired?: string
+  filler?: boolean
+  recap?: boolean
+}
 
 const AnimeDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -16,6 +26,10 @@ const AnimeDetail: React.FC = () => {
     error: episodesError,
   } = useAnimeEpisodes(id)
   const anime = data?.data
+  const episodes: Episode[] = Array.isArray(episodesData?.data) ? episodesData.data : []
+  const fillerEpisodes = episodes.filter((ep) => ep.filler === true)
+  const recapEpisodes = episodes.filter((ep) => ep.recap === true && ep.filler !== true)
+  const canonEpisodes = episodes.filter((ep) => ep.filler !== true && ep.recap !== true)
 
   useEffect(() => {
     if (!anime || !id) return
@@ -46,24 +60,46 @@ const AnimeDetail: React.FC = () => {
         {anime?.type === 'TV' && 
         <>            
             <h2>Episodes</h2>
-            <ul>
-                {isEpisodesLoading && <li>Loading episodes...</li>}
-                {episodesError && (
-                  <li>
-                    Error loading episodes
-                    {episodesError instanceof Error ? `: ${episodesError.message}` : ''}
-                  </li>
-                )}
-                {!isEpisodesLoading && !episodesError && !episodesData?.data?.length && (
-                <li>No episodes found.</li>
-                )}
-                {episodesData?.data?.map((ep) => (
+            {isEpisodesLoading && <p>Loading episodes...</p>}
+            {episodesError && (
+              <p>
+                Error loading episodes
+                {episodesError instanceof Error ? `: ${episodesError.message}` : ''}
+              </p>
+            )}
+            {!isEpisodesLoading && !episodesError && !episodes.length && (
+              <p>No episodes found.</p>
+            )}
+            {!isEpisodesLoading && !episodesError && Boolean(episodes.length) && (
+              <>
+                <h3>Canon Episodes ({canonEpisodes.length})</h3>
+                <ul>
+                  {canonEpisodes.map((ep) => (
                     <li key={ep.mal_id}>
-                        Episode {ep.episode_id}: {ep.title} ({ep.aired})
-                        <span>{ep.filler === true ? ' (Filler Episode)' : ep.recap === true ? ' (Recap Episode)' : ' (Canon Episode)'}</span>
+                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
                     </li>
-                ))}
-            </ul>
+                  ))}
+                </ul>
+
+                <h3>Recap Episodes ({recapEpisodes.length})</h3>
+                <ul>
+                  {recapEpisodes.map((ep) => (
+                    <li key={ep.mal_id}>
+                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
+                    </li>
+                  ))}
+                </ul>
+
+                <h3>Filler Episodes ({fillerEpisodes.length})</h3>
+                <ul>
+                  {fillerEpisodes.map((ep) => (
+                    <li key={ep.mal_id}>
+                      Episode {ep.mal_id ?? 'N/A'}: {ep.title ?? 'Untitled'} ({formatAiredDate(ep.aired)})
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
         </>
         }
         <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" preferredSize="large" />
