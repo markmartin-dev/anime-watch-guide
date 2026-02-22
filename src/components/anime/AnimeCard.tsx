@@ -9,7 +9,6 @@ const AnimeCard: React.FC<{ anime: Anime }> = ({ anime }) => {
 
   return (
     <article>
-      <AnimeImage images={anime.images} title={anime.title} loading="lazy" />
       <h3>
         <Link to={`/anime/${anime.mal_id}/${slug}`}>{anime.title}</Link>
       </h3>
@@ -19,6 +18,7 @@ const AnimeCard: React.FC<{ anime: Anime }> = ({ anime }) => {
           <li key={genre.mal_id}><Link to={`/genres/${genre.mal_id}`}>{genre.name}</Link></li>
         ))}
       </ul>
+      <AnimeImage images={anime.images} title={anime.title} loading="lazy" preferredSize="small"/>
     </article>
   )
 }

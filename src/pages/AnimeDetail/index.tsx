@@ -27,9 +27,9 @@ const AnimeDetail: React.FC = () => {
     <div>
       <Header />
       <main>
-        <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" />
         <h1>{anime?.title}</h1>
         <p>{anime?.synopsis}</p>
+        <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" preferredSize="large" />
       </main>
     </div>
   )

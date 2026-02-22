@@ -1,12 +1,15 @@
 import React from 'react'
 import type { AnimeImages, AnimeImageVariant } from '../../types/anime'
 
+type PreferredSize = 'small' | 'large'
+
 type AnimeImageProps = {
   images?: AnimeImages
   title: string
   loading?: 'eager' | 'lazy'
   sizes?: string
   className?: string
+  preferredSize?: PreferredSize
 }
 
 const buildDensitySrcSet = (imageSet?: AnimeImageVariant): string | undefined => {
@@ -35,16 +38,36 @@ const getFallbackImage = (images?: AnimeImages): string | undefined =>
   images?.webp?.image_url ??
   images?.webp?.small_image_url
 
+const getPreferredSizeImage = (
+  imageSet: AnimeImageVariant | undefined,
+  preferredSize: PreferredSize,
+): string | undefined => {
+  if (!imageSet) return undefined
+  if (preferredSize === 'small') {
+    return imageSet.small_image_url ?? imageSet.image_url
+  }
+  return imageSet.large_image_url ?? imageSet.image_url
+}
+
 const AnimeImage: React.FC<AnimeImageProps> = ({
   images,
   title,
   loading = 'lazy',
   sizes,
   className,
+  preferredSize,
 }) => {
-  const webpSrcSet = buildDensitySrcSet(images?.webp)
-  const jpgSrcSet = buildDensitySrcSet(images?.jpg)
-  const fallbackImage = getFallbackImage(images)
+  const webpSrcSet = preferredSize
+    ? getPreferredSizeImage(images?.webp, preferredSize)
+    : buildDensitySrcSet(images?.webp)
+  const jpgSrcSet = preferredSize
+    ? getPreferredSizeImage(images?.jpg, preferredSize)
+    : buildDensitySrcSet(images?.jpg)
+  const fallbackImage = preferredSize
+    ? getPreferredSizeImage(images?.jpg, preferredSize) ??
+      getPreferredSizeImage(images?.webp, preferredSize) ??
+      getFallbackImage(images)
+    : getFallbackImage(images)
 
   if (!fallbackImage) return null
 
@@ -58,4 +81,3 @@ const AnimeImage: React.FC<AnimeImageProps> = ({
 }
 
 export default AnimeImage
-
