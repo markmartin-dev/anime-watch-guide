@@ -1,9 +1,26 @@
+export type AnimeImageVariant = {
+  image_url?: string
+  small_image_url?: string
+  large_image_url?: string
+}
+
+export type AnimeImages = {
+  jpg?: AnimeImageVariant
+  webp?: AnimeImageVariant
+}
+
+export type AnimeGenre = {
+  mal_id: number
+  name: string
+}
+
 export type Anime = {
   mal_id: number
   url?: string
-  images?: any
+  images?: AnimeImages
   title: string
   synopsis?: string
+  genres?: AnimeGenre[]
 }
 
 export type PaginationItems = {

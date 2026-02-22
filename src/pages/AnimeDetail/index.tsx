@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../components/layout/Header'
+import AnimeImage from '../../components/anime/AnimeImage'
 import { useAnimeById } from '../../hooks/useAnime'
 import { slugify } from '../../utils/slug'
 
@@ -26,6 +27,7 @@ const AnimeDetail: React.FC = () => {
     <div>
       <Header />
       <main>
+        <AnimeImage images={anime?.images} title={anime?.title ?? 'Anime'} loading="eager" />
         <h1>{anime?.title}</h1>
         <p>{anime?.synopsis}</p>
       </main>
