@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Header from '../../components/layout/Header'
 
 const Home: React.FC = () => {
@@ -8,12 +7,20 @@ const Home: React.FC = () => {
       <Header />
       <main>
         <h1>Anime Watch Guide</h1>
-        <nav>
-          <ul>
-            <li><Link to="/anime">All Anime</Link></li>
-            <li><Link to="/news">Anime News</Link></li>
-          </ul>
-        </nav>
+        <div>Carousel from popular anime</div>
+        <div>
+            <h2>News</h2>
+            <span>anime news goes here</span>
+        </div>
+        <div>
+            <h2>Top Anime</h2>
+        </div>
+        <div>
+            <h2>Recommendations</h2>
+        </div>
+        <div>
+            <h2>Anime Reviews</h2>
+        </div>
       </main>
     </div>
   )
