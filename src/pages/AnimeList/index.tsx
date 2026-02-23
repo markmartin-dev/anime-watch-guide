@@ -3,12 +3,19 @@ import Header from '../../components/layout/Header'
 import { useSearchParams } from 'react-router-dom'
 import { useAnimeList } from '../../hooks/useAnime'
 import AnimeCard from '../../components/anime/AnimeCard'
+import type { Anime } from '../../types/anime'
 
 const AnimeList: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const pageParam = Number(searchParams.get('page') || '1')
 
-  const { data, isLoading, error, isFetching } = useAnimeList(pageParam)
+  const { data, isLoading, error, isFetching } = useAnimeList({
+    page: pageParam,
+    limit: 20,
+    orderBy: 'title',
+    sfw: true,
+    type: 'tv',
+  })
 
   const goToPage = (p: number) => {
     if (p <= 0) return
@@ -25,7 +32,7 @@ const AnimeList: React.FC = () => {
         {isLoading && <div>Loading...</div>}
         {error && <div>Error loading anime</div>}
         <section className="card__wrapper">
-          {data?.data?.map((a: any) => (
+          {data?.data?.map((a: Anime) => (
             <AnimeCard key={a.mal_id} anime={a} />
           ))}
         </section>
