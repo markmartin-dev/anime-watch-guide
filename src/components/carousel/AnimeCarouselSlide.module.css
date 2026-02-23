@@ -1,0 +1,23 @@
+.image {
+    max-width: 600px;
+    width: 100%;
+    object-fit: cover;
+    /* aspect-ratio: 16/9; */
+    border-radius: 0px;
+    grid-area: image;
+}
+
+.textContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    grid-area: content;
+}
+
+.card {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    grid-template-areas: "image content"
+                         "image content";
+}
