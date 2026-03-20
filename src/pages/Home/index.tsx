@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
 import AnimeImage from '../../components/anime/AnimeImage'
 import FeatureHero from '../../components/feature/FeatureHero'
@@ -30,17 +31,6 @@ const newsItems = [
     label: 'Manga',
     title: '"Ghost in the Machine" manga reaches 10 million copies',
     time: 'Yesterday',
-  },
-]
-
-const footerGroups = [
-  {
-    title: 'Explore',
-    links: ['A-Z List', 'Seasonal Charts', 'Streaming Schedule', 'Studios'],
-  },
-  {
-    title: 'Support',
-    links: ['Terms of Use', 'Privacy Policy', 'Discord Community', 'Contact Us'],
   },
 ]
 
@@ -216,43 +206,7 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        <footer className="homeFooter">
-          <div className="homeFooterTop">
-            <div className="homeFooterBrand">
-              <div className="homeFooterLogo">
-                <span></span>
-                <span></span>
-              </div>
-              <div>
-                <strong>nofillers.moe</strong>
-                <p>
-                  Your ultimate destination for discovering, tracking, and keeping up with the
-                  latest in the world of anime. Built by fans, for fans.
-                </p>
-              </div>
-            </div>
-
-            <div className="homeFooterGroups">
-              {footerGroups.map((group) => (
-                <div key={group.title} className="homeFooterGroup">
-                  <h3>{group.title}</h3>
-                  {group.links.map((link) => (
-                    <span key={link}>{link}</span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="homeFooterBottom">
-            <span>© 2026 nofillers.moe Global. All rights reserved.</span>
-            <div className="homeFooterIcons">
-              <span>◔</span>
-              <span>⌁</span>
-              <span>♡</span>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </div>
   )

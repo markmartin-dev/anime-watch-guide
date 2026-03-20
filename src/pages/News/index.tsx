@@ -1,4 +1,5 @@
 import React from 'react'
+import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
 
 const newsSignals = [
@@ -66,6 +67,8 @@ const News: React.FC = () => {
             </article>
           </div>
         </section>
+
+        <Footer />
       </main>
     </div>
   )

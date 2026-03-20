@@ -774,93 +774,6 @@ p {
   gap: 0.45rem;
 }
 
-.homeFooter {
-  margin-top: 1rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.12);
-}
-
-.homeFooterTop {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-bottom: 2rem;
-}
-
-.homeFooterBrand {
-  display: flex;
-  gap: 1rem;
-  max-width: 420px;
-}
-
-.homeFooterLogo {
-  position: relative;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
-}
-
-.homeFooterLogo span {
-  position: absolute;
-  display: block;
-  background: linear-gradient(135deg, #60a5fa, #256af4);
-  transform: rotate(45deg);
-  border-radius: 5px;
-}
-
-.homeFooterLogo span:first-child {
-  inset: 4px;
-}
-
-.homeFooterLogo span:last-child {
-  width: 10px;
-  height: 10px;
-  top: 0;
-  right: 0;
-}
-
-.homeFooterBrand strong {
-  display: block;
-  margin-bottom: 0.7rem;
-}
-
-.homeFooterBrand p {
-  margin: 0;
-}
-
-.homeFooterGroups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(140px, 1fr));
-  gap: 2rem;
-}
-
-.homeFooterGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-}
-
-.homeFooterGroup span {
-  color: var(--muted);
-}
-
-.homeFooterBottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.12);
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.homeFooterIcons {
-  display: flex;
-  gap: 1rem;
-  color: #dbe9ff;
-}
-
 @media (max-width: 1100px) {
   .homeTrendingGrid,
   .homeReleaseGrid {
@@ -887,10 +800,6 @@ p {
     flex-direction: row;
     flex-wrap: wrap;
   }
-
-  .homeFooterTop {
-    flex-direction: column;
-  }
 }
 
 @media (max-width: 640px) {
@@ -902,14 +811,5 @@ p {
   .homeReleaseCard,
   .homeRankingItem {
     grid-template-columns: 1fr;
-  }
-
-  .homeFooterGroups {
-    grid-template-columns: 1fr;
-  }
-
-  .homeFooterBottom {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }

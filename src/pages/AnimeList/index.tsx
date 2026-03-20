@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
+import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
 import { useAnimeList } from '../../hooks/useAnime'
 import AnimeCard from '../../components/anime/AnimeCard'
@@ -97,6 +98,8 @@ const AnimeList: React.FC = () => {
           </button>
           {isFetching && <span className="status-chip">Updating...</span>}
         </footer>
+
+        <Footer />
       </main>
     </div>
   )

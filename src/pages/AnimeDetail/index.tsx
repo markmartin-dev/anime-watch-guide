@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
 import AnimeImage from '../../components/anime/AnimeImage'
 import { useAnimeById, useAnimeEpisodesInfinite, useAnimePictures } from '../../hooks/useAnime'
@@ -403,6 +404,8 @@ const AnimeDetail: React.FC = () => {
             </>
           )}
         </section>
+
+        <Footer />
       </main>
     </div>
   )
