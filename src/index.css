@@ -707,6 +707,7 @@ p {
   background: rgba(37, 106, 244, 0.16);
   color: #8fb7ff;
   font-size: 0.78rem;
+  text-align: center;
 }
 
 .homeNewsLead {
