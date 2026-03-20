@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
@@ -103,11 +103,11 @@ const AnimeDetail: React.FC = () => {
     fetchNextPage,
   ])
 
-  const galleryImages = useMemo<AnimeImages[]>(() => {
+  const galleryImages: AnimeImages[] = (() => {
     const pictures = animePics?.data?.slice(0, 4) ?? []
     if (pictures.length) return pictures
     return anime?.images ? [anime.images] : []
-  }, [anime?.images, animePics?.data])
+  })()
 
   const visibleEpisodes = showAllEpisodes ? dedupedEpisodes : dedupedEpisodes.slice(0, 6)
   const airedLabel = anime?.aired?.string ?? (anime?.year ? String(anime.year) : 'N/A')
