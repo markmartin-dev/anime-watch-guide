@@ -1,32 +1,258 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Header from '../../components/layout/Header'
-import { AnimeCarousel } from '../../components/carousel/AnimeCarousel'
-import { useTopAnime } from '../../hooks/useAnime'
+import AnimeImage from '../../components/anime/AnimeImage'
+import FeatureHero from '../../components/feature/FeatureHero'
+import { useTopAnime, useAnimeList } from '../../hooks/useAnime'
+import { slugify } from '../../utils/slug'
+import type { Anime } from '../../types/anime'
+
+const filterChips = [
+  { label: 'Trending', icon: 'trending_up' },
+  { label: 'New', icon: 'verified' },
+  { label: 'Hot', icon: 'local_fire_department' },
+  { label: 'Must Watch', icon: 'animation' },
+  { label: 'Recently Updated', icon: 'update' },
+]
+
+const newsItems = [
+  {
+    label: 'Production',
+    title: 'Studio MAPPA announces new original project for Summer 2026',
+    time: '2 hours ago',
+  },
+  {
+    label: 'Event',
+    title: 'Anime Expo 2026 schedules announced for main stage panels',
+    time: '5 hours ago',
+  },
+  {
+    label: 'Manga',
+    title: '"Ghost in the Machine" manga reaches 10 million copies',
+    time: 'Yesterday',
+  },
+]
+
+const footerGroups = [
+  {
+    title: 'Explore',
+    links: ['A-Z List', 'Seasonal Charts', 'Streaming Schedule', 'Studios'],
+  },
+  {
+    title: 'Support',
+    links: ['Terms of Use', 'Privacy Policy', 'Discord Community', 'Contact Us'],
+  },
+]
+
+const getAnimeHref = (anime?: Anime) =>
+  anime ? `/anime/${anime.mal_id}/${slugify(anime.title)}` : '/anime'
+
+const getGenreLabel = (anime?: Anime) =>
+  anime?.genres?.slice(0, 2).map((genre) => genre.name).join(', ') || 'Curated watch guide'
+
+const releaseDates = ['April 12, 2026', 'April 16, 2026', 'May 02, 2026']
 
 const Home: React.FC = () => {
-    const { data } = useTopAnime({ page: 1, limit: 10, sfw: true, filter: 'airing', type: 'tv' })
-    const popularAnime = data?.data || []
+  const { data } = useTopAnime({ page: 1, limit: 10, sfw: true, filter: 'airing', type: 'tv' })
+  const { data: animeList } = useAnimeList({
+    page: 2,
+    limit: 8,
+    orderBy: 'popularity',
+    sfw: true,
+    type: 'tv',
+    status: 'complete',
+  })
+
+  const popularAnime = data?.data || []
+  const libraryAnime = animeList?.data || []
+  const heroAnime = popularAnime[0] || libraryAnime[0]
+  const trendingAnime = (libraryAnime.length ? libraryAnime : popularAnime).slice(0, 5)
+  const topWeekAnime = popularAnime.slice(0, 3)
+  const leadNewsAnime = trendingAnime[2] || heroAnime
+  const releases = (libraryAnime.length ? libraryAnime : popularAnime).slice(0, 3)
+
   return (
-    <div>
+    <div className="page-shell">
       <Header />
-      <main>
-        <div>
-            <h1>Anime Watch Guide</h1>
-            <AnimeCarousel slides={popularAnime.map(a => ({id: a.mal_id.toString(), title: a.title, synopsis: a.synopsis, images: a.images}))}/>
-        </div>
-        <div>
-            <h2>News</h2>
-            <span>anime news goes here</span>
-        </div>
-        <div>
-            <h2>Top Anime</h2>
-        </div>
-        <div>
-            <h2>Recommendations</h2>
-        </div>
-        <div>
-            <h2>Anime Reviews</h2>
-        </div>
+      <main className="page-main homeDashboard">
+        <FeatureHero
+          badge="Spotlight"
+          title={heroAnime?.title ?? 'Cyber Odyssey: Resurgence'}
+          description={
+            heroAnime?.synopsis ??
+            'In a world where memories can be traded, a rogue technician discovers a sequence that could overwrite reality itself.'
+          }
+          image={heroAnime?.images}
+          href={getAnimeHref(heroAnime)}
+        />
+
+        <section className="homeFilters">
+          {filterChips.map((chip) => (
+            <button key={chip.label} type="button" className="homeFilterChip">
+              <span className="material-symbols-outlined">{chip.icon}</span>
+              {chip.label}
+            </button>
+          ))}
+        </section>
+
+        <section className="homeSection">
+          <div className="section-header">
+            <div>
+              <h2 className="homeSectionTitle">Trending Now</h2>
+            </div>
+            <Link to="/anime" className="homeSectionLink">
+              View All
+            </Link>
+          </div>
+
+          <div className="homeTrendingGrid">
+            {trendingAnime.map((anime) => (
+              <Link key={anime.mal_id} to={getAnimeHref(anime)} className="homeTrendCard">
+                <div className="homeTrendMedia">
+                  <AnimeImage
+                    images={anime.images}
+                    title={anime.title}
+                    loading="lazy"
+                    className="homeTrendImage"
+                  />
+                  <span className="homeTrendBadge">
+                    EP {anime.episodes ? `/${anime.episodes}` : '/?'}
+                  </span>
+                </div>
+                <div className="homeTrendBody">
+                  <h3>{anime.title}</h3>
+                  <p>{getGenreLabel(anime)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="homeColumns">
+          <div className="homePanel">
+            <h2 className="homeSectionTitle">Top This Week</h2>
+            <div className="homeRankingList">
+              {topWeekAnime.map((anime, index) => (
+                <Link key={anime.mal_id} to={getAnimeHref(anime)} className="homeRankingItem">
+                  <span className="homeRankingIndex">{String(index + 1).padStart(2, '0')}</span>
+                  <div className="homeRankingThumb">
+                    <AnimeImage
+                      images={anime.images}
+                      title={anime.title}
+                      loading="lazy"
+                      className="homeRankingImage"
+                    />
+                  </div>
+                  <div className="homeRankingContent">
+                    <h3>{anime.title}</h3>
+                    <p>
+                      {anime.studios?.[0]?.name ?? 'Top studio pick'} • {anime.score ?? 'N/A'} Rating
+                    </p>
+                  </div>
+                  <div className="homeRankingTags">
+                    {anime.genres?.slice(0, 2).map((genre) => (
+                      <span key={genre.mal_id} className="homeTag">
+                        {genre.name}
+                      </span>
+                    ))}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="homePanel">
+            <h2 className="homeSectionTitle">Latest News</h2>
+            <div className="homeNewsLead">
+              {leadNewsAnime ? (
+                <AnimeImage
+                  images={leadNewsAnime.images}
+                  title={leadNewsAnime.title}
+                  loading="lazy"
+                  className="homeNewsLeadImage"
+                />
+              ) : null}
+              <div className="homeNewsLeadBody">
+                <span className="homeNewsLabel">{newsItems[0].label}</span>
+                <h3>{newsItems[0].title}</h3>
+                <p>{newsItems[0].time}</p>
+              </div>
+            </div>
+            <div className="homeNewsList">
+              {newsItems.slice(1).map((item) => (
+                <article key={item.title} className="homeNewsItem">
+                  <span className="homeNewsLabel">{item.label}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.time}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="homeSection">
+          <h2 className="homeSectionTitle">Upcoming Releases</h2>
+          <div className="homeReleaseGrid">
+            {releases.map((anime, index) => (
+              <Link key={anime.mal_id} to={getAnimeHref(anime)} className="homeReleaseCard">
+                <div className="homeReleaseThumb">
+                  <AnimeImage
+                    images={anime.images}
+                    title={anime.title}
+                    loading="lazy"
+                    className="homeReleaseImage"
+                  />
+                </div>
+                <div className="homeReleaseBody">
+                  <span className="homeReleaseDate">{releaseDates[index] ?? 'Coming soon'}</span>
+                  <h3>{anime.title}</h3>
+                  <p>
+                    {anime.synopsis?.slice(0, 96) ??
+                      'A fresh story update is approaching the watch queue.'}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <footer className="homeFooter">
+          <div className="homeFooterTop">
+            <div className="homeFooterBrand">
+              <div className="homeFooterLogo">
+                <span></span>
+                <span></span>
+              </div>
+              <div>
+                <strong>nofillers.moe</strong>
+                <p>
+                  Your ultimate destination for discovering, tracking, and keeping up with the
+                  latest in the world of anime. Built by fans, for fans.
+                </p>
+              </div>
+            </div>
+
+            <div className="homeFooterGroups">
+              {footerGroups.map((group) => (
+                <div key={group.title} className="homeFooterGroup">
+                  <h3>{group.title}</h3>
+                  {group.links.map((link) => (
+                    <span key={link}>{link}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="homeFooterBottom">
+            <span>© 2026 nofillers.moe Global. All rights reserved.</span>
+            <div className="homeFooterIcons">
+              <span>◔</span>
+              <span>⌁</span>
+              <span>♡</span>
+            </div>
+          </div>
+        </footer>
       </main>
     </div>
   )
