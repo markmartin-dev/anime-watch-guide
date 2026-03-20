@@ -30,13 +30,46 @@ export const useAnimeList = (params: number | FetchAnimeListParams = 1) => {
     q,
     sfw = false,
     type,
+    genres,
+    start_date,
+    end_date,
+    min_score,
+    max_score,
     status,
   } = normalized
   const statusKey = Array.isArray(status) ? status.join(',') : status ?? ''
 
   return useQuery<AnimeListResponse, Error>({
-    queryKey: ['anime', page, limit, orderBy, q ?? '', sfw, type ?? '', statusKey],
-    queryFn: () => fetchAnimeList({ page, limit, orderBy, q, sfw, type, status }),
+    queryKey: [
+      'anime',
+      page,
+      limit,
+      orderBy,
+      q ?? '',
+      sfw,
+      type ?? '',
+      genres ?? '',
+      start_date ?? '',
+      end_date ?? '',
+      min_score ?? '',
+      max_score ?? '',
+      statusKey,
+    ],
+    queryFn: () =>
+      fetchAnimeList({
+        page,
+        limit,
+        orderBy,
+        q,
+        sfw,
+        type,
+        genres,
+        start_date,
+        end_date,
+        min_score,
+        max_score,
+        status,
+      }),
     placeholderData: keepPreviousData,
   })
 }

@@ -32,6 +32,7 @@ export type FetchAnimeListParams = {
     q?: string
     sfw?: boolean
     type?: string
+    genres?: string
     start_date?: string
     end_date?: string
     min_score?: number
@@ -80,6 +81,7 @@ export const fetchAnimeList = async (params: FetchAnimeListParams = {}): Promise
     q,
     sfw = true,
     type: rawType,
+    genres,
     start_date,
     end_date,
     min_score,
@@ -95,6 +97,7 @@ export const fetchAnimeList = async (params: FetchAnimeListParams = {}): Promise
     ...(q ? { q } : {}),
     sfw,
     ...(type ? { type } : {}),
+    ...(genres ? { genres } : {}),
     ...(start_date ? { start_date } : {}),
     ...(end_date ? { end_date } : {}),
     ...(status ? { status } : {}),

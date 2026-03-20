@@ -1,0 +1,134 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.88), rgba(21, 31, 49, 0.98));
+  box-shadow: 0 20px 44px rgba(2, 6, 23, 0.26);
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  padding: 0.9rem 0.9rem 0;
+}
+
+.newBadge {
+  position: absolute;
+  top: 1.15rem;
+  left: 1.15rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #3478ff 0%, #256af4 100%);
+  color: #eff6ff;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.mediaMeta {
+  position: absolute;
+  right: 1.15rem;
+  bottom: 0.85rem;
+  left: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.score,
+.type {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 30px;
+  padding: 0.35rem 0.6rem;
+  border-radius: 9px;
+  background: rgba(8, 12, 20, 0.82);
+  color: #f8fafc;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.score :global(.material-symbols-outlined) {
+  font-size: 0.95rem;
+  color: #facc15;
+  line-height: 1;
+}
+
+.type {
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.title {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.05rem;
+}
+
+.genres {
+  margin: 0;
+  color: #98a7be;
+  line-height: 1.55;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  color: #a6b5ca;
+  font-size: 0.9rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.statusDotAiring {
+  background: #14d6a0;
+}
+
+.statusDotMuted {
+  background: #64748b;
+}
+
+.metaValue {
+  white-space: nowrap;
+}
