@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import {
     fetchAnimeList,
     fetchAnimeById,
@@ -16,7 +16,9 @@ import {
 import type {
   AnimeEpisodesResponse,
   AnimeListResponse,
+  AnimePicturesResponse,
   AnimeRecommendationsResponse,
+  TopAnimeResponse,
 } from '../types/anime'
 
 export const useAnimeList = (params: number | FetchAnimeListParams = 1) => {
@@ -35,17 +37,17 @@ export const useAnimeList = (params: number | FetchAnimeListParams = 1) => {
   return useQuery<AnimeListResponse, Error>({
     queryKey: ['anime', page, limit, orderBy, q ?? '', sfw, type ?? '', statusKey],
     queryFn: () => fetchAnimeList({ page, limit, orderBy, q, sfw, type, status }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 }
 
 export const useTopAnime = (params: number| FetchTopAnimeParams = 1) => {
     const normalized = typeof params === 'number' ? { page: params } : params
     const { page = 1, type, sfw = true, limit = 10, filter } = normalized
-    return useQuery({
+    return useQuery<TopAnimeResponse, Error>({
         queryKey: ['topAnime', page, type, sfw, limit, filter],
         queryFn: () => fetchTopAnime({ page, type, sfw, limit, filter }),
-        keepPreviousData: true,
+        placeholderData: keepPreviousData,
     })  
 }   
 
@@ -69,7 +71,7 @@ export const useSeasonAnime = (
       filter ?? '',
     ],
     queryFn: () => fetchSeasonAnime(normalized),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 }
 
@@ -87,7 +89,7 @@ export const useAnimeRecommendations = (
   return useQuery<AnimeRecommendationsResponse, Error>({
     queryKey: ['animeRecommendations', page],
     queryFn: () => fetchAnimeRecommendations({ page }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 }
 
@@ -121,7 +123,7 @@ export const useAnimeEpisodesInfinite = (id?: string) => {
 }
 
 export const useAnimePictures = (id?: string) => {
-  return useQuery({
+  return useQuery<AnimePicturesResponse, Error>({
     queryKey: ['anime', id, 'pictures'],
     queryFn: () => fetchAnimePictures(id || ''),
     enabled: Boolean(id),

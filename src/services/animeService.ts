@@ -4,6 +4,7 @@ import type {
   Anime,
   TopAnimeResponse,
   AnimeRecommendationsResponse,
+  AnimePicturesResponse,
 } from '../types/anime'
 
 const VALID_ANIME_TYPES = new Set([
@@ -110,7 +111,7 @@ export const fetchAnimeEpisodes = async (id: string | number, page = 1) => {
   return apiGet(`/anime/${id}/episodes`, { page })
 }
 
-export const fetchAnimePictures = async (id: string | number) => {
+export const fetchAnimePictures = async (id: string | number): Promise<AnimePicturesResponse> => {
   return apiGet(`/anime/${id}/pictures`)
 }
 

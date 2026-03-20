@@ -14,6 +14,11 @@ export type AnimeGenre = {
     name: string
 }
 
+export type AnimeStudio = {
+    mal_id: number
+    name: string
+}
+
 export type AnimeTitle = {
     type: string
     title: string
@@ -32,17 +37,21 @@ export type Anime = {
     year?: number
     episodes?: number
     synopsis?: string
+    background?: string
+    rating?: string
+    duration?: string
+    aired?: {
+        from?: string
+        to?: string
+        string?: string
+    }
     genres?: AnimeGenre[]
+    studios?: AnimeStudio[]
 }
 
 export type TopAnimeResponse = {
-    mal_id: number
-    url?: string
-    images?: AnimeImages
-    titles: AnimeTitle[]
-    type: string
-    status: string
-    genres?: AnimeGenre[]
+    data: Anime[]
+    pagination?: Pagination
 }
 
 export type PaginationItems = {
@@ -78,6 +87,10 @@ export type AnimeEpisodesResponse = {
         current_page?: number
         has_next_page?: boolean
     }
+}
+
+export type AnimePicturesResponse = {
+    data: AnimeImages[]
 }
 
 export type AnimeRecommendationEntry = {

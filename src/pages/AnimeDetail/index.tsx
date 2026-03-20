@@ -5,7 +5,7 @@ import AnimeImage from '../../components/anime/AnimeImage'
 import { useAnimeById, useAnimeEpisodesInfinite, useAnimePictures } from '../../hooks/useAnime'
 import { slugify } from '../../utils/slug'
 import { formatAiredDate } from '../../utils/format'
-import type { Anime, AnimeEpisode } from '../../types/anime'
+import type { Anime, AnimeEpisode, AnimeImages } from '../../types/anime'
 import styles from './AnimeDetail.module.css'
 
 const getEpisodeNumbers = (episodes: AnimeEpisode[]): number[] =>
@@ -102,7 +102,7 @@ const AnimeDetail: React.FC = () => {
     fetchNextPage,
   ])
 
-  const galleryImages = useMemo(() => {
+  const galleryImages = useMemo<AnimeImages[]>(() => {
     const pictures = animePics?.data?.slice(0, 4) ?? []
     if (pictures.length) return pictures
     return anime?.images ? [anime.images] : []
@@ -284,7 +284,7 @@ const AnimeDetail: React.FC = () => {
                 <h2 className={styles.sideTitle}>Gallery</h2>
               </div>
               <div className={styles.galleryGrid}>
-                {galleryImages.slice(0, 4).map((imageSet, index) => (
+                {galleryImages.slice(0, 4).map((imageSet: AnimeImages, index: number) => (
                   <div key={`${anime.mal_id}-gallery-${index}`} className={styles.galleryItem}>
                     <AnimeImage
                       images={imageSet}
