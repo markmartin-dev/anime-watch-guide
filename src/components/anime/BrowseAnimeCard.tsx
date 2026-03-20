@@ -22,7 +22,7 @@ const getDisplayStatus = (status?: Anime['status']) => {
 
 const getMetaValue = (anime: Anime) => {
   if (anime.episodes) return `Ep ${anime.episodes}`
-  if (anime.duration) return anime.duration
+  if (anime.duration) return anime.duration === 'Unknown' ? 'N/A' : anime.duration
   if (anime.year) return String(anime.year)
   return 'TV'
 }
@@ -61,7 +61,7 @@ const BrowseAnimeCard: React.FC<BrowseAnimeCardProps> = ({ anime, isNew = false 
             ></span>
             {status}
           </span>
-          <span className={styles.metaValue}>{getMetaValue(anime)}</span>
+          <span className={styles.metaValue}>{getMetaValue(anime) ?? 'N/A'}</span>
         </div>
       </div>
     </Link>
