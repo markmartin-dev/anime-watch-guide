@@ -24,6 +24,13 @@ export type Anime = {
     url?: string
     images?: AnimeImages
     title: string
+    type?: string
+    status?: Array<string> | string
+    score?: number
+    rank?: number
+    popularity?: number
+    year?: number
+    episodes?: number
     synopsis?: string
     genres?: AnimeGenre[]
 }
@@ -53,5 +60,36 @@ export type Pagination = {
 
 export type AnimeListResponse = {
     data: Anime[]
+    pagination?: Pagination
+}
+
+export type AnimeEpisode = {
+    mal_id: number
+    episode_id?: number
+    title?: string
+    aired?: string
+    filler?: boolean
+    recap?: boolean
+}
+
+export type AnimeEpisodesResponse = {
+    data?: AnimeEpisode[]
+    pagination?: {
+        current_page?: number
+        has_next_page?: boolean
+    }
+}
+
+export type AnimeRecommendationEntry = {
+    mal_id: string
+    entry: Anime[]
+    content?: string
+    user?: {
+        username?: string
+    }
+}
+
+export type AnimeRecommendationsResponse = {
+    data: AnimeRecommendationEntry[]
     pagination?: Pagination
 }
