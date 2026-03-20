@@ -1,0 +1,221 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid #1e293b;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 28%),
+    linear-gradient(180deg, #111827 0%, #0f172a 100%);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.24);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: #f8fafc;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brandMark {
+  position: relative;
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.brandSparkPrimary,
+.brandSparkSecondary {
+  position: absolute;
+  display: block;
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  transform: rotate(45deg);
+  border-radius: 0.28rem;
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.25);
+}
+
+.brandSparkPrimary {
+  inset: 0.2rem;
+}
+
+.brandSparkSecondary {
+  width: 0.72rem;
+  height: 0.72rem;
+  top: -0.05rem;
+  right: -0.05rem;
+}
+
+.brandText {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.navLink {
+  padding: 0.7rem 0.95rem;
+  border-radius: 999px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.navLink:hover,
+.navLinkActive {
+  color: #f8fafc;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.searchForm {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 35rem;
+  min-width: 16rem;
+  min-height: 3rem;
+  padding-left: 3rem;
+  border: 1px solid rgba(148, 163, 184, 0.06);
+  border-radius: 12px;
+  background: #182133;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.searchForm:focus-within {
+  border-color: rgba(96, 165, 250, 0.5);
+  box-shadow:
+    0 0 0 3px rgba(96, 165, 250, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.searchLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border: 2px solid #7f8ca4;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.searchIcon::after {
+  content: '';
+  position: absolute;
+  width: 0.5rem;
+  height: 2px;
+  right: -0.35rem;
+  bottom: -0.12rem;
+  background: #7f8ca4;
+  transform: rotate(45deg);
+  border-radius: 999px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.82rem 1rem 0.82rem 0;
+  border: 0;
+  color: #f8fafc;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+}
+
+.searchInput::placeholder {
+  color: #77849b;
+}
+
+.searchSubmit {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .nav {
+    justify-content: center;
+  }
+
+  .searchForm {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .inner {
+    padding: 0.9rem 1rem;
+  }
+
+  .brandText {
+    font-size: 1.15rem;
+  }
+
+  .nav {
+    justify-content: flex-start;
+  }
+
+  .searchForm {
+    min-width: 0;
+    padding-left: 2.5rem;
+  }
+
+  .searchButton {
+    padding: 0.65rem 0.85rem;
+  }
+}
