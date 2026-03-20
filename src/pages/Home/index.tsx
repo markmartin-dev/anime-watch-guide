@@ -210,7 +210,7 @@ const Home: React.FC = () => {
         <section className="homeSection">
           <h2 className="homeSectionTitle">Upcoming Releases</h2>
           <div className="homeReleaseGrid">
-            {releases.map((anime, index) => (
+            {releases.map((anime) => (
               <Link key={anime.mal_id} to={getAnimeHref(anime)} className="homeReleaseCard">
                 <div className="homeReleaseThumb">
                   <AnimeImage
