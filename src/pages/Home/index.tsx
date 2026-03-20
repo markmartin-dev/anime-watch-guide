@@ -40,7 +40,25 @@ const getAnimeHref = (anime?: Anime) =>
 const getGenreLabel = (anime?: Anime) =>
   anime?.genres?.slice(0, 2).map((genre) => genre.name).join(', ') || 'Curated watch guide'
 
-const releaseDates = ['April 12, 2026', 'April 16, 2026', 'May 02, 2026']
+const formatReleaseDate = (anime?: Anime) => {
+  const releaseDate = anime?.aired?.from
+
+  if (!releaseDate) {
+    return 'Coming soon'
+  }
+
+  const parsedDate = new Date(releaseDate)
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return 'Coming soon'
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: '2-digit',
+    year: 'numeric',
+  }).format(parsedDate)
+}
 
 const Home: React.FC = () => {
   const { data } = useTopAnime({ page: 1, limit: 10, sfw: true, filter: 'airing', type: 'tv' })
@@ -52,14 +70,23 @@ const Home: React.FC = () => {
     type: 'tv',
     status: 'complete',
   })
+  const { data: upcomingAnimeList } = useAnimeList({
+    page: 1,
+    limit: 3,
+    orderBy: 'popularity',
+    sfw: true,
+    type: 'tv',
+    status: 'upcoming',
+  })
 
   const popularAnime = data?.data || []
   const libraryAnime = animeList?.data || []
+  const upcomingAnime = upcomingAnimeList?.data || []
   const heroAnime = popularAnime[0] || libraryAnime[0]
   const trendingAnime = (libraryAnime.length ? libraryAnime : popularAnime).slice(0, 5)
   const topWeekAnime = popularAnime.slice(0, 3)
   const leadNewsAnime = trendingAnime[2] || heroAnime
-  const releases = (libraryAnime.length ? libraryAnime : popularAnime).slice(0, 3)
+  const releases = upcomingAnime
 
   return (
     <div className="page-shell">
@@ -194,7 +221,7 @@ const Home: React.FC = () => {
                   />
                 </div>
                 <div className="homeReleaseBody">
-                  <span className="homeReleaseDate">{releaseDates[index] ?? 'Coming soon'}</span>
+                  <span className="homeReleaseDate">{formatReleaseDate(anime)}</span>
                   <h3>{anime.title}</h3>
                   <p>
                     {anime.synopsis?.slice(0, 96) ??
