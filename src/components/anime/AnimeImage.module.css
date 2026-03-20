@@ -1,9 +1,13 @@
 .picture {
   display: block;
+  width: 100%;
   line-height: 0;
 }
 
 .image {
+  display: block;
+  width: 100%;
+  height: auto;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
 }

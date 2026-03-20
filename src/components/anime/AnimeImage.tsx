@@ -13,13 +13,16 @@ type AnimeImageProps = {
   preferredSize?: PreferredSize
 }
 
-const buildDensitySrcSet = (imageSet?: AnimeImageVariant): string | undefined => {
+const DEFAULT_RESPONSIVE_SIZES =
+  '(max-width: 640px) 90vw, (max-width: 1024px) 45vw, (max-width: 1440px) 30vw, 300px'
+
+const buildWidthSrcSet = (imageSet?: AnimeImageVariant): string | undefined => {
   if (!imageSet) return undefined
 
-  const candidates: Array<{ url?: string; density: string }> = [
-    { url: imageSet.small_image_url, density: '1x' },
-    { url: imageSet.image_url, density: '2x' },
-    { url: imageSet.large_image_url, density: '3x' },
+  const candidates: Array<{ url?: string; width: string }> = [
+    { url: imageSet.small_image_url, width: '42w' },
+    { url: imageSet.image_url, width: '225w' },
+    { url: imageSet.large_image_url, width: '450w' },
   ]
 
   const seen = new Set<string>()
@@ -27,17 +30,17 @@ const buildDensitySrcSet = (imageSet?: AnimeImageVariant): string | undefined =>
     .filter((candidate) => candidate.url && !seen.has(candidate.url))
     .map((candidate) => {
       seen.add(candidate.url as string)
-      return `${candidate.url} ${candidate.density}`
+      return `${candidate.url} ${candidate.width}`
     })
 
   return entries.length ? entries.join(', ') : undefined
 }
 
 const getFallbackImage = (images?: AnimeImages): string | undefined =>
-  images?.jpg?.image_url ??
-  images?.jpg?.small_image_url ??
   images?.webp?.image_url ??
-  images?.webp?.small_image_url
+  images?.webp?.small_image_url ??
+  images?.jpg?.image_url ??
+  images?.jpg?.small_image_url
 
 const getPreferredSizeImage = (
   imageSet: AnimeImageVariant | undefined,
@@ -54,19 +57,20 @@ const AnimeImage: React.FC<AnimeImageProps> = ({
   images,
   title,
   loading = 'lazy',
-  sizes,
+  sizes = DEFAULT_RESPONSIVE_SIZES,
   className,
   preferredSize,
 }) => {
   const webpSrcSet = preferredSize
     ? getPreferredSizeImage(images?.webp, preferredSize)
-    : buildDensitySrcSet(images?.webp)
+    : buildWidthSrcSet(images?.webp)
   const jpgSrcSet = preferredSize
     ? getPreferredSizeImage(images?.jpg, preferredSize)
-    : buildDensitySrcSet(images?.jpg)
+    : buildWidthSrcSet(images?.jpg)
+  const imgSrcSet = webpSrcSet ?? jpgSrcSet
   const fallbackImage = preferredSize
-    ? getPreferredSizeImage(images?.jpg, preferredSize) ??
-      getPreferredSizeImage(images?.webp, preferredSize) ??
+    ? getPreferredSizeImage(images?.webp, preferredSize) ??
+      getPreferredSizeImage(images?.jpg, preferredSize) ??
       getFallbackImage(images)
     : getFallbackImage(images)
 
@@ -77,7 +81,14 @@ const AnimeImage: React.FC<AnimeImageProps> = ({
     <picture className={styles.picture}>
       {webpSrcSet && <source type="image/webp" srcSet={webpSrcSet} sizes={sizes} />}
       {jpgSrcSet && <source type="image/jpeg" srcSet={jpgSrcSet} sizes={sizes} />}
-      <img src={fallbackImage} alt={`${title} poster`} loading={loading} className={imageClassName} />
+      <img
+        src={fallbackImage}
+        srcSet={imgSrcSet}
+        sizes={sizes}
+        alt={`${title} poster`}
+        loading={loading}
+        className={imageClassName}
+      />
     </picture>
   )
 }
