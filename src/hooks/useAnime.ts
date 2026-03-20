@@ -3,11 +3,13 @@ import {
     fetchAnimeList,
     fetchAnimeById,
     fetchAnimeEpisodes,
+    fetchAnimeGenres,
     fetchTopAnime,
     fetchSeasonAnime,
     fetchAnimePictures,
     fetchAnimeRecommendations,
     type FetchAnimeListParams,
+    type FetchAnimeGenresParams,
     type FetchTopAnimeParams,
     type FetchSeasonAnimeBaseParams,
     type FetchSeasonAnimeParams,
@@ -15,6 +17,7 @@ import {
 } from '../services/animeService'
 import type {
   AnimeEpisodesResponse,
+  AnimeGenresResponse,
   AnimeListResponse,
   AnimePicturesResponse,
   AnimeRecommendationsResponse,
@@ -134,6 +137,14 @@ export const useAnimeById = (id?: string) => {
   })
 }
 
+export const useAnimeGenres = (params: FetchAnimeGenresParams = {}) => {
+  const { filter = 'genres' } = params
+  return useQuery<AnimeGenresResponse, Error>({
+    queryKey: ['animeGenres', filter],
+    queryFn: () => fetchAnimeGenres({ filter }),
+  })
+}
+
 export const useAnimeEpisodes = (id?: string, page = 1) => {
   return useQuery({
     queryKey: ['anime', id, 'episodes', page],
@@ -170,6 +181,7 @@ export default {
   useSeason,
   useAnimeRecommendations,
   useAnimeById,
+  useAnimeGenres,
   useAnimeEpisodes,
   useAnimeEpisodesInfinite,
   useAnimePictures,

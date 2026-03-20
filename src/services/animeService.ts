@@ -4,6 +4,7 @@ import type {
   Anime,
   TopAnimeResponse,
   AnimeRecommendationsResponse,
+  AnimeGenresResponse,
   AnimePicturesResponse,
 } from '../types/anime'
 
@@ -50,6 +51,10 @@ export type FetchTopAnimeParams = {
 
 export type FetchAnimeRecommendationsParams = {
   page?: number
+}
+
+export type FetchAnimeGenresParams = {
+  filter?: 'genres' | 'explicit_genres' | 'themes' | 'demographics'
 }
 
 export type SeasonName = 'winter' | 'spring' | 'summer' | 'fall'
@@ -118,6 +123,13 @@ export const fetchAnimePictures = async (id: string | number): Promise<AnimePict
   return apiGet(`/anime/${id}/pictures`)
 }
 
+export const fetchAnimeGenres = async (
+  params: FetchAnimeGenresParams = {},
+): Promise<AnimeGenresResponse> => {
+  const { filter = 'genres' } = params
+  return apiGet('/genres/anime', { filter })
+}
+
 export const fetchTopAnime = async (params: FetchTopAnimeParams = {}): Promise<TopAnimeResponse> => {
     const { page = 1, type: rawType, sfw = true, limit = 10, filter } = params
     const type = normalizeAnimeType(rawType)
@@ -179,6 +191,7 @@ export default {
   fetchAnimeById,
   fetchAnimeEpisodes,
   fetchAnimePictures,
+  fetchAnimeGenres,
   fetchTopAnime,
   fetchSeasonAnime,
   fetchSeasonNow,

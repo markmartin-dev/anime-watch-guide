@@ -93,6 +93,10 @@ export type AnimePicturesResponse = {
     data: AnimeImages[]
 }
 
+export type AnimeGenresResponse = {
+    data: AnimeGenre[]
+}
+
 export type AnimeRecommendationEntry = {
     mal_id: string
     entry: Anime[]

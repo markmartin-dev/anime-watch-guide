@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import BrowseAnimeCard from '../../components/anime/BrowseAnimeCard'
 import Footer from '../../components/layout/Footer'
 import Header from '../../components/layout/Header'
-import { useAnimeList } from '../../hooks/useAnime'
+import { useAnimeGenres, useAnimeList } from '../../hooks/useAnime'
 import styles from './AnimeList.module.css'
 
 const VALID_QUERY_STATUSES = new Set(['airing', 'complete', 'upcoming'])
@@ -13,14 +13,6 @@ const STATUS_LABELS: Record<string, string> = {
   complete: 'Finished Airing',
   upcoming: 'Upcoming',
 }
-
-const GENRE_FILTERS = [
-  { label: 'Action', icon: 'swords', value: '1' },
-  { label: 'Adventure', icon: 'landscape', value: '2' },
-  { label: 'Fantasy', icon: 'auto_fix_high', value: '10' },
-  { label: 'Sci-Fi', icon: 'rocket_launch', value: '24' },
-  { label: 'Comedy', icon: 'sentiment_satisfied', value: '4' },
-]
 
 const SEASON_FILTERS = [
   { label: 'Spring 2026', value: 'spring-2026', start: '2026-03-01', end: '2026-05-31' },
@@ -34,12 +26,17 @@ const AnimeList: React.FC = () => {
   const statusParam = searchParams.get('status')?.trim().toLowerCase() ?? ''
   const normalizedStatus = VALID_QUERY_STATUSES.has(statusParam) ? statusParam : undefined
   const genreParam = searchParams.get('genre')?.trim() ?? ''
-  const activeGenre = GENRE_FILTERS.find((genre) => genre.value === genreParam)
   const seasonParam = searchParams.get('season')?.trim() ?? ''
   const activeSeason = SEASON_FILTERS.find((season) => season.value === seasonParam)
-  const minScoreParam = Number(searchParams.get('min_score') || '8.5')
+  const minScoreParamRaw = searchParams.get('min_score')
+  const minScoreParam = Number(minScoreParamRaw)
   const normalizedMinScore =
-    Number.isFinite(minScoreParam) && minScoreParam >= 0 && minScoreParam <= 10 ? minScoreParam : 8.5
+    minScoreParamRaw && Number.isFinite(minScoreParam) && minScoreParam >= 0 && minScoreParam <= 10
+      ? minScoreParam
+      : 0
+  const { data: genresData, isLoading: isGenresLoading } = useAnimeGenres({ filter: 'genres' })
+  const genreItems = [...(genresData?.data ?? [])].sort((a, b) => a.name.localeCompare(b.name))
+  const activeGenre = genreItems.find((genre) => String(genre.mal_id) === genreParam)
 
   const { data, isLoading, error, isFetching } = useAnimeList({
     page: pageParam,
@@ -48,13 +45,16 @@ const AnimeList: React.FC = () => {
     q: queryParam || undefined,
     sfw: true,
     type: 'tv',
-    genres: activeGenre?.value,
+    genres: activeGenre ? String(activeGenre.mal_id) : undefined,
     start_date: activeSeason?.start,
     end_date: activeSeason?.end,
-    min_score: normalizedMinScore,
+    min_score: minScoreParamRaw ? normalizedMinScore : undefined,
     status: normalizedStatus,
   })
   const animeItems = data?.data ?? []
+  const hasActiveFilters = Boolean(
+    normalizedStatus || activeGenre || activeSeason || minScoreParamRaw,
+  )
 
   const updateFilters = (updates: Record<string, string | undefined>) => {
     const nextParams = new URLSearchParams(searchParams)
@@ -65,6 +65,15 @@ const AnimeList: React.FC = () => {
       }
       nextParams.set(key, value)
     })
+    nextParams.set('page', '1')
+    setSearchParams(nextParams)
+  }
+
+  const resetFilters = () => {
+    const nextParams = new URLSearchParams()
+    if (queryParam) {
+      nextParams.set('q', queryParam)
+    }
     nextParams.set('page', '1')
     setSearchParams(nextParams)
   }
@@ -89,27 +98,41 @@ const AnimeList: React.FC = () => {
         <div className={styles.page}>
           <aside className={styles.sidebar}>
             <section className={styles.filterSection}>
-              <span className={styles.filterLabel}>Genre</span>
-              <div className={styles.filterList}>
-                {GENRE_FILTERS.map((genre) => (
-                  <button
-                    key={genre.label}
-                    type="button"
-                    className={
-                      activeGenre?.value === genre.value
-                        ? `${styles.filterButton} ${styles.filterButtonActive}`
-                        : styles.filterButton
-                    }
-                    onClick={() =>
-                      updateFilters({
-                        genre: activeGenre?.value === genre.value ? undefined : genre.value,
-                      })
-                    }
-                  >
-                    <span className="material-symbols-outlined">{genre.icon}</span>
-                    {genre.label}
+              <div className={styles.filterHeader}>
+                <span className={styles.filterLabel}>Genre</span>
+                {hasActiveFilters ? (
+                  <button type="button" className={styles.resetButton} onClick={resetFilters}>
+                    Reset Filters
                   </button>
-                ))}
+                ) : null}
+              </div>
+              <div className={`${styles.filterList} ${styles.filterListScrollable}`}>
+                {isGenresLoading ? (
+                  <div className={styles.stateCard}>Loading genres...</div>
+                ) : (
+                  genreItems.map((genre) => (
+                    <button
+                      key={genre.mal_id}
+                      type="button"
+                      className={
+                        activeGenre?.mal_id === genre.mal_id
+                          ? `${styles.filterButton} ${styles.filterButtonActive}`
+                          : styles.filterButton
+                      }
+                      onClick={() =>
+                        updateFilters({
+                          genre:
+                            activeGenre?.mal_id === genre.mal_id
+                              ? undefined
+                              : String(genre.mal_id),
+                        })
+                      }
+                    >
+                      <span className="material-symbols-outlined">sell</span>
+                      {genre.name}
+                    </button>
+                  ))
+                )}
               </div>
             </section>
 
@@ -173,7 +196,9 @@ const AnimeList: React.FC = () => {
               <div className={styles.ratingBlock}>
                 <div className={styles.ratingHeader}>
                   <span>0.0</span>
-                  <span className={styles.ratingActive}>{normalizedMinScore.toFixed(1)}+</span>
+                  <span className={styles.ratingActive}>
+                    {minScoreParamRaw ? `${normalizedMinScore.toFixed(1)}+` : 'Any'}
+                  </span>
                   <span>10.0</span>
                 </div>
                 <div className={styles.sliderTrack}>
@@ -215,8 +240,13 @@ const AnimeList: React.FC = () => {
 
             {isLoading && <div className={styles.stateCard}>Loading catalog entries...</div>}
             {error && <div className={styles.stateCard}>Error loading anime.</div>}
+            {!isLoading && !error && animeItems.length === 0 && (
+              <div className={styles.stateCard}>
+                No anime found for the current search and filter combination.
+              </div>
+            )}
 
-            {!error && (
+            {!error && animeItems.length > 0 && (
               <section className={styles.grid}>
                 {animeItems.map((anime, index) => (
                   <BrowseAnimeCard
@@ -228,29 +258,31 @@ const AnimeList: React.FC = () => {
               </section>
             )}
 
-            <div className={styles.paginationBar}>
-              <button
-                className={styles.paginationButton}
-                onClick={() => goToPage(pageParam - 1)}
-                disabled={pageParam <= 1 || !pagination}
-              >
-                <span className="material-symbols-outlined">chevron_left</span>
-              </button>
-              <span className={styles.paginationCurrent}>{pagination?.current_page ?? pageParam}</span>
-              <button
-                className={styles.paginationButton}
-                onClick={() => goToPage((pagination?.current_page ?? pageParam) + 1)}
-                disabled={pagination ? !pagination.has_next_page : false}
-              >
-                <span className="material-symbols-outlined">chevron_right</span>
-              </button>
-              <span className={styles.paginationGhost}>
-                {pagination?.last_visible_page
-                  ? `${pagination.last_visible_page} pages`
-                  : activeStatusLabel}
-              </span>
-              {isFetching && <span className="status-chip">Updating...</span>}
-            </div>
+            {animeItems.length > 0 && (
+              <div className={styles.paginationBar}>
+                <button
+                  className={styles.paginationButton}
+                  onClick={() => goToPage(pageParam - 1)}
+                  disabled={pageParam <= 1 || !pagination}
+                >
+                  <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <span className={styles.paginationCurrent}>{pagination?.current_page ?? pageParam}</span>
+                <button
+                  className={styles.paginationButton}
+                  onClick={() => goToPage((pagination?.current_page ?? pageParam) + 1)}
+                  disabled={pagination ? !pagination.has_next_page : false}
+                >
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+                <span className={styles.paginationGhost}>
+                  {pagination?.last_visible_page
+                    ? `${pagination.last_visible_page} pages`
+                    : activeStatusLabel}
+                </span>
+                {isFetching && <span className="status-chip">Updating...</span>}
+              </div>
+            )}
           </section>
         </div>
 
